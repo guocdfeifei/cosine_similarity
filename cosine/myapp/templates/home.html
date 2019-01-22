@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>相似度测试</title>
+    <style type="text/css">
+    .moneyrecord {
+       display:none;
+       border:0.1em solid #00AAEE;
+       height:30%;
+       width:40%;
+       position:absolute;/*让节点脱离文档流,我的理解就是,从页面上浮出来,不再按照文档其它内容布局*/
+       top:24%;/*节点脱离了文档流,如果设置位置需要用top和left,right,bottom定位*/
+       left:30%;
+       z-index:2;/*个人理解为层级关系,由于这个节点要在顶部显示,所以这个值比其余节点的都大*/
+       background: white;
+       padding: 5px 5px 5px 5px;
+        overflow:auto;
+   }
+</style>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+</head>
+<body>
+
+    <!--<form action="/" method="post">-->
+        <!--{%csrf_token%}-->
+        <!--<textarea type="text" name="q" placeholder="请输入待比较文章"></textarea>-->
+        <!--<input type="submit" value="相似度测试">-->
+    <!--</form>-->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>请上传待比较文章（txt格式）</label>
+        {{ form }}
+        <input type="submit" value="提交"/>
+    </form>
+    {% if actList %}
+    <table border="1">
+        <!--<tr>-->
+        <!--<td><textarea id="maintext" placeholder="请输入待比较文章"></textarea></td>-->
+        <!--<td><button onclick="gotest()">相似度测试</button></td>-->
+      <!--</tr>-->
+      <tr >
+        <th width="90%">文章标题</th>
+        <th width="10%">相似度</th>
+      </tr>
+    {% for i in actList %}
+        <tr >
+            <td><a href="javascript:;" onclick="show(this)" text1='{{ i.text }}' >{{ i.title }}</a></td>
+        <td>{{ i.similarity }}</td>
+      </tr>
+
+    {% endfor %}
+
+    </table>
+{% endif %}
+
+<div class="moneyrecord" id="login">
+       <a class="button" style="padding: 0px 0px 0px 0px;float: right;" href="javascript:hide()">关闭</a>
+       <div style="padding-left: 5%;" id="tctext">
+          弹窗内容1
+       </div>
+   </div>
+</body>
+
+<script>
+    var login = document.getElementById('login');
+    function show(obj) {
+        // alert($(obj).attr('text1'));
+        $("#tctext").text($(obj).attr('text1'));
+        login.style.display = "block";
+        // over.style.display = "block";
+     }
+    function hide() {
+        login.style.display = "none";
+        // over.style.display = "none";
+     }
+</script>
+</html>
